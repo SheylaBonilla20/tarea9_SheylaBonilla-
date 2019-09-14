@@ -1,20 +1,17 @@
-// UTILS
+// Utilidades
 // Conectamos al servidor con socket.io
-var socket = io();
+const socket = io();
 
 // Evitar XSS usando escape()
-var escape = function(html) {
+let escape = (html) => {
     return $('<div>').text(html).html();
 };
 
-
-
-// AUTH
-
+// Autenticación
 // Usar el modal de login con el usuario al entrar
-$('#login').modal({ dismissible: false }).submit(function(e) {
+$('#login').modal({ dismissible: false }).submit((e) => {
     e.preventDefault();
-    var user = $('#login input').val();
+    let user = $('#login input').val();
 
     // Continuar sólo si sí que hay usuario
     if (!user) return;
@@ -26,23 +23,20 @@ $('#login').modal({ dismissible: false }).submit(function(e) {
 
 if (cookies('user')) {
     socket.emit('login', cookies('user'));
-    setTimeout(function() { $('#message').focus(); }, 500);
+    setTimeout(() => { $('#message').focus(); }, 500);
 } else {
     $('#login').modal('open');
 }
 
-$('.logout').click(function() {
+$('.logout').click(() => {
     cookies({ user: null });
     window.location.reload();
 });
 
-
-
-// MENSAJES
-
+// Para los mensajes
 // Añadir un mensaje a la lista y hacer scroll
-var add = function(html) {
-    var toScroll = $('.messages').prop("scrollHeight") - 50 < $('.messages').scrollTop() + $('.messages').height();
+let add = (html) => {
+    let toScroll = $('.messages').prop("scrollHeight") - 50 < $('.messages').scrollTop() + $('.messages').height();
     $('.messages').append(html);
 
     // Hacer scroll sólo si mantenemos la conversación abajo, si hemos subido no scrollear
@@ -54,10 +48,10 @@ var add = function(html) {
 };
 
 // El usuario envía un mensaje
-$('form.message').submit(function(e) {
+$('form.message').submit((e) => {
     e.preventDefault();
-    var $input = $(e.target).find('input');
-    var text = $input.val();
+    let $input = $(e.target).find('input');
+    let text = $input.val();
 
     // Borrar el mensaje del input
     $input.val('');
@@ -66,21 +60,20 @@ $('form.message').submit(function(e) {
     socket.emit('message', text);
 });
 
-
-socket.on('login', function(message) {
+socket.on('login', (message) => {
     add('<div class="msg login">\
     <span class="user">' + escape(message.user) + '</span> logged in.\
   </div>');
 });
 
-socket.on('message', function(message) {
+socket.on('message', (message) => {
     add('<div class="msg">\
     <span class="user">' + escape(message.user) + ':</span> \
     <span class="msg">' + escape(message.text) + '</span>\
   </div>');
 });
 
-socket.on('logout', function(message) {
+socket.on('logout', (message) => {
     add('<div class="msg logout">\
     <span class="user">' + escape(message.user) + '</span> logged out.\
   </div>');
