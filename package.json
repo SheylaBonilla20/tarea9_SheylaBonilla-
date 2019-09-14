@@ -1,0 +1,14 @@
+{
+    "name": "tarea9_sheylabonilla",
+    "version": "1.0.0",
+    "description": "Chat",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js"
+    },
+    "author": "Sheyla Bonilla",
+    "license": "ISC",
+    "dependencies": {
+        "server": "^1.0.19"
+    }
+}
